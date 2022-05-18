@@ -36,9 +36,6 @@ public class Player : MonoBehaviour
         CanMove = true;
     }
 
-
-
-
     void Update()
     {
         GetInput();
@@ -67,8 +64,7 @@ public class Player : MonoBehaviour
     }
 
     void Attack()
-    {
-        
+    {       
 
         fireDelay += Time.deltaTime * 0.92f;
         isFireReady = weapon.GetComponent<Weapon>().rate < fireDelay;
