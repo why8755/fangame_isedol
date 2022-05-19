@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameCookInterface;
 
-public class Test : MonoBehaviour
+public class PlayCanvas : CanvasUI
 {
     // Start is called before the first frame update
     void Start()
     {
-        Managers.Instance.SounaManager.Play(AudioSourceType.BGM);
+        
     }
 
     // Update is called once per frame
