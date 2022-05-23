@@ -6,6 +6,7 @@ public class Managers : Singleton<Managers>
 {
     [SerializeField] private SoundManager soundManager;
     [SerializeField] private CanvasManager canvasManager;
+    [SerializeField] private DataManager dataManager;
 
     private void Awake()
     {
@@ -14,6 +15,7 @@ public class Managers : Singleton<Managers>
 
     public SoundManager SounaManager { get { return soundManager; }}
     public CanvasManager CanvasManager { get { return canvasManager; }}
+    public DataManager DataManager { get { return dataManager; }}
 
 
 }

@@ -13,6 +13,17 @@ namespace GameCookInterface
         Gosegu,
         Vichan
     }
+
+    public enum CharacterType
+    {
+        Ine,
+        JingBurger,
+        Lilpa,
+        Jururu,
+        Gosegu,
+        Vichan
+    }
+    
     public enum CanvasType
     {
         Extra,
