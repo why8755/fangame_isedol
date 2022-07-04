@@ -42,11 +42,9 @@ public class Player : MonoBehaviour
         Attack();
 
         if (CanMove == false)
-        {
-            
+        {    
             targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-            transform.LookAt(targetPosition);
-       
+            //transform.LookAt(targetPosition);
         }
 
 
@@ -82,7 +80,7 @@ public class Player : MonoBehaviour
                 anima.SetTrigger("doSwing");
                 fireDelay = 0;
                 CanInput = true;
-                //player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
+                player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
             }
         }
         else
