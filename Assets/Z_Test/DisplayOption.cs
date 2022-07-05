@@ -67,14 +67,14 @@ public class DisplayOption : MonoBehaviour
 
     }
 
-    public void DropdownOptionNumber(int x)
+    public void DropdownOptionNumber(int _num)
     {
-        resolutionNum = x;
+        resolutionNum = _num;
     }
 
-    public void FullScreen(bool isFull)
+    public void FullScreen(bool _isFull)
     {
-        fullScreen = isFull ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        fullScreen = _isFull ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
     }
 
     public void AgreeButton()
