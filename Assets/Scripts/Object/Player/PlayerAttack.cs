@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     // Start is called before the first frame update
-
     private void OnEnable()
     {
         StartCoroutine("AutoDisable");
@@ -13,9 +12,10 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && other.gameObject.GetComponentInParent<enemy2>().isHit)
         {
-            other.GetComponent<EnemyControl>().TakeDamage(10);
+            other.GetComponent<EnemyControl>().TakeDamage(this.gameObject);
+            other.gameObject.GetComponentInParent<enemy2>().isHit = false;
         }
     }
     private IEnumerable AutoDisable()

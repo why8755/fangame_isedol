@@ -183,8 +183,6 @@ namespace StarterAssets
 			if(Input.GetAxis("Mouse ScrollWheel") != 0)
 			{
 				float scroll = Input.GetAxis("Mouse ScrollWheel") * speed;
-				Debug.Log(scroll);
-				Debug.Log((componentBase is Cinemachine3rdPersonFollow));
 				if(componentBase is Cinemachine3rdPersonFollow)
 				{
 					if((componentBase as Cinemachine3rdPersonFollow).CameraDistance - scroll < 0.45f && scroll > 0f)

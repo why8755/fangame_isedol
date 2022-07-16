@@ -12,6 +12,7 @@ using UnityEngine.AI;
  SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
  pool.SetKeepMonsterCount(5);
  */
+ /*
 public class SpawningPool : MonoBehaviour
 {
     [SerializeField]
@@ -106,3 +107,4 @@ public class GameManagerEx
                     }
                 }
 }
+*/

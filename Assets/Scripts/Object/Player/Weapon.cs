@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
 {
    public enum Type { Melee, Range };
     public Type type;
-    public int damage;
+    public int damage;//ë¬´ê¸° ê³µê²©ë ¥
     public float rate;
     public BoxCollider meleeArea;
     public TrailRenderer trailEffect;
@@ -16,24 +16,22 @@ public class Weapon : MonoBehaviour
     {
         if(type == Type.Melee)
         {
+            StopCoroutine("swing");
             StartCoroutine("swing");
         }
     }
 
     IEnumerator swing()
     {
-        yield return new WaitForSeconds(0.1f); //0.1ÃÊ ´ë±â
+        yield return new WaitForSeconds(0.1f); //0.1ï¿½ï¿½ ï¿½ï¿½ï¿½
         meleeArea.enabled = true;
         trailEffect.enabled = true;
  
-        yield return new WaitForSeconds(0.3f); //1ÇÁ·¹ÀÓ ´ë±â
+        yield return new WaitForSeconds(0.1f); //1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         meleeArea.enabled = false;
         
-        yield return new WaitForSeconds(0.3f); //1ÇÁ·¹ÀÓ ´ë±â
-        trailEffect.enabled = false;    
-
-
-
+        yield return new WaitForSeconds(0.3f); //1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+        trailEffect.enabled = false;
     }
 
 

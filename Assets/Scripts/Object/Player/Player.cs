@@ -16,10 +16,18 @@ public class Player : MonoBehaviour
     public GameObject CameraRoot;
     public GameObject player;
 
+    //stat
+    public int maxHealth;
+    public int curHealth;
+
+    public int defense;
+    public int damage;
+
     public bool CanMove = true;
     public bool CanInput;
     bool fDown;
     bool isFireReady = true;
+    public bool isHit = true; //맞을 수 있는가
 
     float rotation;
     float fireDelay;
@@ -44,7 +52,7 @@ public class Player : MonoBehaviour
         if (CanMove == false)
         {    
             targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-            //transform.LookAt(targetPosition);
+            transform.LookAt(targetPosition);
         }
 
 
@@ -57,8 +65,7 @@ public class Player : MonoBehaviour
 
     void GetInput()
     {
-        fDown = Input.GetMouseButtonDown(0);
-        
+        fDown = Input.GetMouseButtonDown(0);   
     }
 
     void Attack()
