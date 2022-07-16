@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundManager: {fileID: 880300182}
   canvasManager: {fileID: 1687513198}
+  dataManager: {fileID: 0}
 --- !u!4 &33280065
 Transform:
   m_ObjectHideFlags: 0
@@ -410,7 +411,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &880300180
 GameObject:
@@ -460,6 +461,49 @@ MonoBehaviour:
   audioSources:
   - {fileID: 1954360373}
   - {fileID: 2056809436}
+--- !u!1 &1685554925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1685554927}
+  - component: {fileID: 1685554926}
+  m_Layer: 0
+  m_Name: test UI Controler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1685554926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685554925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c62464e7bcba7334cb015fc6fb506327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1685554927
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685554925}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1687513196
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,6 +553,7 @@ MonoBehaviour:
   - {fileID: -7156174663940764877, guid: 537aacd7cad9c8f44b77678afc3c6db0, type: 3}
   - {fileID: -8559142954733918676, guid: 3fd343254bef6bf41b6c5028b0462ad9, type: 3}
   - {fileID: 5401074089093759934, guid: e5ca8fbc5044ee8488bf29cffa39db16, type: 3}
+  - {fileID: 8940026555892259319, guid: ebaaf502b8b4206458d6b2b9b3bb5030, type: 3}
   canvasReference: []
   _canvasContainer: {fileID: 1987894151}
   stackCount: 0

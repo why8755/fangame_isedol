@@ -12,11 +12,7 @@ GameObject:
   - component: {fileID: 7802605867582264186}
   - component: {fileID: 7802605867582264185}
   - component: {fileID: 7802605867582264184}
-  - component: {fileID: 7802605867582264167}
-  - component: {fileID: 7802605867582264166}
-  - component: {fileID: 7802605867582264165}
   - component: {fileID: 7802605867582264164}
-  - component: {fileID: 7802605867582264163}
   m_Layer: 7
   m_Name: DamageTestor
   m_TagString: Enemy
@@ -100,51 +96,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7802605867582264167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802605867582264162}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7944d133bededbf4396a5c5feca27a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  snemy: {fileID: 0}
---- !u!114 &7802605867582264166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802605867582264162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff4cce9dd2da78440a5d50d289c8a357, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10000
-  curHealth: 10000
-  defense: 0
-  damage: 0
-  target: {fileID: 0}
---- !u!114 &7802605867582264165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802605867582264162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bfe47cfc245a5a419e501c738512115, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  meshRenderer: {fileID: 0}
-  originColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!54 &7802605867582264164
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -161,16 +112,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!65 &7802605867582264163
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802605867582264162}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
