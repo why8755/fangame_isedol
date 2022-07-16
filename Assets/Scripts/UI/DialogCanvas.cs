@@ -17,22 +17,23 @@ public class DialogCanvas : CanvasUI
 
     int curDialogIndex = -1;
 
+    
     private IEnumerator Start()
     {
-        yield return UpdateDialog();
+        yield return new WaitUntil(() => UpdateDialog());
     }
 
     public bool UpdateDialog()
     {
-        NextDialog();
+        //NextDialog();
 
         if (Input.GetMouseButtonDown(0))
         {
             if (dialogDB.Sheet1.Count > curDialogIndex + 1) NextDialog();
-        }
-        else
-        {
-            Managers.Instance.CanvasManager.CloseCanvasUI();
+            else
+            {
+                Managers.Instance.CanvasManager.CloseCanvasUI();
+            }
         }
 
         return false;
@@ -40,6 +41,7 @@ public class DialogCanvas : CanvasUI
 
     void NextDialog()
     {
+
         curDialogIndex++;
 
         dialogText.text = dialogDB.Sheet1[curDialogIndex].dialog;
