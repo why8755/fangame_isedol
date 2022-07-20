@@ -20,7 +20,7 @@ public class EnemyControl : MonoBehaviour
     }
     // Start is called before the first frame update
 
-    public void TakeDamage(GameObject target)
+    public void TakeDamage(GameObject target) // 데미지 받은 경우
     {
         Weapon weapon = target.GetComponentInParent<Weapon>();
         int Hp = this.GetComponent<enemy2>().curHealth -= weapon.damage;
