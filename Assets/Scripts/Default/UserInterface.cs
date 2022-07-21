@@ -31,6 +31,7 @@ namespace GameCookInterface
         Intro,
         Lobby,
         Options,
+        Dialogs,
         Score,
         Credits,
         Pause,

@@ -1,6 +1,10 @@
-﻿using UnityEngine;
+//using System.Numerics;
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using Cinemachine;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -53,11 +57,15 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera up")]
 		public float TopClamp = 70.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
-		public float BottomClamp = -30.0f;
+		public float BottomClamp = -5.0f;
 		[Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
 		public float CameraAngleOverride = 0.0f;
 		[Tooltip("For locking the camera position on all axis")]
 		public bool LockCameraPosition = false;
+		[Tooltip("Scroll speed")]
+		public float speed = 0.5f;
+		[SerializeField] CinemachineVirtualCamera virtualcamera;
+		CinemachineComponentBase componentBase;
 
 		// cinemachine
 		private float _cinemachineTargetYaw;
@@ -87,10 +95,10 @@ namespace StarterAssets
 		private StarterAssetsInputs _input;
 		public GameObject _mainCamera;
 		public GameObject Boy;
+		private Player _player;
 		private const float _threshold = 0.01f;
 
 		private bool _hasAnimator;
-
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -105,7 +113,7 @@ namespace StarterAssets
 			_hasAnimator = TryGetComponent(out _animator);
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-
+			_player = GetComponent<Player>();
 			AssignAnimationIDs();
 
 			// reset our timeouts on start
@@ -117,14 +125,21 @@ namespace StarterAssets
 		{
 			_hasAnimator = TryGetComponent(out _animator);
 			
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
+			if(_player.mouseHoldCheck)
+			{
+				JumpAndGravity();
+				GroundedCheck();
+				CameraZoomIn();
+				Move();
+			}
 		}
 
 		private void LateUpdate()
 		{
-			CameraRotation();
+			if(_player.mouseHoldCheck)
+			{
+				CameraRotation();
+			}
 		}
 
 		private void AssignAnimationIDs()
@@ -165,6 +180,45 @@ namespace StarterAssets
 			// Cinemachine will follow this target
 			CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
 		}
+		
+		private void CameraZoomIn()
+		{
+			if(componentBase == null)
+			{
+				componentBase = virtualcamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
+			}
+			if(Input.GetAxis("Mouse ScrollWheel") != 0)
+			{
+				float scroll = Input.GetAxis("Mouse ScrollWheel") * speed;
+				if(componentBase is Cinemachine3rdPersonFollow)
+				{
+					if((componentBase as Cinemachine3rdPersonFollow).CameraDistance - scroll < 0.45f && scroll > 0f)
+					{
+						(componentBase as Cinemachine3rdPersonFollow).CameraDistance = 0.45f;
+					}
+					else if((componentBase as Cinemachine3rdPersonFollow).CameraDistance - scroll  > 3.0f && scroll < 0f)
+					{
+						(componentBase as Cinemachine3rdPersonFollow).CameraDistance = 3.0f;
+					}else
+					{
+						(componentBase as Cinemachine3rdPersonFollow).CameraDistance -= scroll;
+					}
+
+					if((componentBase as Cinemachine3rdPersonFollow).CameraDistance <= 1.25f)
+					{
+						BottomClamp = Mathf.Lerp(BottomClamp,-40.0f,0.2f);
+					}
+					else if((componentBase as Cinemachine3rdPersonFollow).CameraDistance > 2.5f)
+					{
+						BottomClamp = Mathf.Lerp(BottomClamp,-7.5f,0.2f);
+					}
+					else
+					{
+						BottomClamp = Mathf.Lerp(BottomClamp,-15.0f,0.2f);
+					}
+				}
+			}
+		}
 
 		private void Move()
 		{
@@ -186,7 +240,7 @@ namespace StarterAssets
 				float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
 			// accelerate or decelerate to target speed
-			if (GameObject.Find("Boy").GetComponent<Player>().CanInput == true)
+			if (this.gameObject.GetComponent<Player>().CanInput == true)
 			{
 				if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
 				{

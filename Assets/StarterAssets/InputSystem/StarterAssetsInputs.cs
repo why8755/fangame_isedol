@@ -10,6 +10,7 @@ namespace StarterAssets
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
+		public Vector2 axis;
 		public bool jump;
 		public bool sprint;
 
@@ -36,6 +37,11 @@ namespace StarterAssets
 			}
 		}
 
+		public void OnScroll(InputValue value)
+		{
+			ScrollInput(value.Get<Vector2>().normalized);
+		}
+
 		public void OnJump(InputValue value)
 		{
 			JumpInput(value.isPressed);
@@ -58,6 +64,11 @@ namespace StarterAssets
 		public void LookInput(Vector2 newLookDirection)
 		{
 			look = newLookDirection;
+		}
+
+		public void ScrollInput(Vector2 newScrollValue)
+		{
+			axis = newScrollValue;
 		}
 
 		public void JumpInput(bool newJumpState)

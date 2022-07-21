@@ -6,23 +6,39 @@ using StarterAssets;
 
 public class Player : MonoBehaviour
 {
+    public bool mouseHoldCheck = true; // true일때는 유저행동불가
+    public GameObject crosshair; // 임시 크로스헤어 제거용
     public GameObject weapon;
 
     public GameObject attackCollision;
     private Animator anima;
 
     private StarterAssetsInputs _input;
+    private ThirdPersonController _third;
 
     public GameObject CameraRoot;
     public GameObject player;
+
+    //체력
+    public int maxHealth;
+    public int curHealth;
+
+    public int defense;//방어력
+    public int damage;//공격력(유저 기본 공격력)
+    public float rate; // 공속
+    public float speed;
 
     public bool CanMove = true;
     public bool CanInput;
     bool fDown;
     bool isFireReady = true;
+    public bool isHit = true; //맞을 수 있는가
 
     float rotation;
     float fireDelay;
+
+    private int _animIDSpeed;
+	private int _animIDMotionSpeed;
 
     public GameObject target;
     private Vector3 targetPosition;
@@ -31,7 +47,10 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        _third = GetComponent<ThirdPersonController>();
         anima = GetComponent<Animator>();
+        _animIDSpeed = Animator.StringToHash("Speed");
+		_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         CanInput = true;
         CanMove = true;
     }
@@ -39,17 +58,24 @@ public class Player : MonoBehaviour
     void Update()
     {
         GetInput();
-        Attack();
 
-        if (CanMove == false)
-        {
-            Debug.Log("ȭ����!!!");
-            targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-            transform.LookAt(targetPosition);
-       
+        if(mouseHoldCheck){ // alt -> cant move 
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            Attack();
+
+            if (CanMove == false)
+            {    
+                targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+                transform.LookAt(targetPosition);
+            }
         }
-
-
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
     }
 
    public void OnattacCollision()
@@ -59,8 +85,18 @@ public class Player : MonoBehaviour
 
     void GetInput()
     {
-        fDown = Input.GetMouseButtonDown(0);
-        
+        fDown = Input.GetMouseButtonDown(0);   
+
+        if(Input.GetKeyDown(KeyCode.LeftAlt) && (CanMove && _third.Grounded))
+        {
+            if(mouseHoldCheck){
+                anima.SetFloat(_animIDSpeed, 0.01f);
+			    anima.SetFloat(_animIDMotionSpeed, 0.01f);
+            }
+            CanInput = !CanInput;
+            mouseHoldCheck = !mouseHoldCheck;
+            crosshair.SetActive(mouseHoldCheck);
+        }
     }
 
     void Attack()
@@ -82,7 +118,7 @@ public class Player : MonoBehaviour
                 anima.SetTrigger("doSwing");
                 fireDelay = 0;
                 CanInput = true;
-                //player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
+                player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
             }
         }
         else

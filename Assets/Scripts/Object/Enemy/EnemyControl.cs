@@ -1,36 +1,49 @@
+//using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
+    [SerializeField]
     private Animator animator;
-    private SkinnedMeshRenderer meshRenderer;
+    [SerializeField]
+    private MeshRenderer meshRenderer;
+    [SerializeField]
     private Color originColor;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
-        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        animator = GetComponentInChildren<Animator>();
+        meshRenderer = GetComponent<MeshRenderer>();
         originColor = meshRenderer.material.color;
     }
     // Start is called before the first frame update
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(GameObject target) // 데미지 받은 경우
     {
-        Debug.Log(damage + "�� ü���� �����մϴ�");
-        animator.SetTrigger("onhit");
-        StartCoroutine("OnHItColor");
-
+        Weapon weapon = target.GetComponentInParent<Weapon>();
+        int Hp = this.GetComponent<enemy2>().curHealth -= weapon.damage;
+        Debug.Log("Damage : "+ weapon.damage +" Current Hp : "+ Hp);
+        //target.GetComponent<Collider>().enabled = false; //데미지 2번터져서 넣어둔 임시 코드
+        //Vector3 reactVec = transform.position - target.transform.position; //허수아비용에서는 필요없어서 뺏음
+        StartCoroutine(OnHitColor(Hp));
     }
 
-    private IEnumerable OnHitColor()
+    private IEnumerator OnHitColor(int Hp)
     {
         meshRenderer.material.color = Color.red;
 
         yield return new WaitForSeconds(0.1f);
 
-        meshRenderer.material.color = originColor;
+        if(Hp <= 0)
+        {
+            meshRenderer.material.color = Color.gray;
+        }
+        else
+        {
+            meshRenderer.material.color = originColor;
+        }
     }
     void Start()
     {
