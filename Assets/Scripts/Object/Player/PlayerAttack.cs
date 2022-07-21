@@ -12,7 +12,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") && other.gameObject.GetComponentInParent<enemy2>().isHit)
+        if (other.CompareTag("Enemy") && other.gameObject.GetComponentInParent<enemy2>().isHit) // 공격했을때 적이고 무적이 아닐시 
         {
             other.GetComponent<EnemyControl>().TakeDamage(this.gameObject);
             other.gameObject.GetComponentInParent<enemy2>().isHit = false;

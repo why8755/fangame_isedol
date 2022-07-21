@@ -57,7 +57,7 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera up")]
 		public float TopClamp = 70.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
-		public float BottomClamp = -15.0f;
+		public float BottomClamp = -5.0f;
 		[Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
 		public float CameraAngleOverride = 0.0f;
 		[Tooltip("For locking the camera position on all axis")]
@@ -95,6 +95,7 @@ namespace StarterAssets
 		private StarterAssetsInputs _input;
 		public GameObject _mainCamera;
 		public GameObject Boy;
+		private Player _player;
 		private const float _threshold = 0.01f;
 
 		private bool _hasAnimator;
@@ -112,7 +113,7 @@ namespace StarterAssets
 			_hasAnimator = TryGetComponent(out _animator);
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-
+			_player = GetComponent<Player>();
 			AssignAnimationIDs();
 
 			// reset our timeouts on start
@@ -124,15 +125,21 @@ namespace StarterAssets
 		{
 			_hasAnimator = TryGetComponent(out _animator);
 			
-			JumpAndGravity();
-			GroundedCheck();
-			CameraZoomIn();
-			Move();
+			if(_player.mouseHoldCheck)
+			{
+				JumpAndGravity();
+				GroundedCheck();
+				CameraZoomIn();
+				Move();
+			}
 		}
 
 		private void LateUpdate()
 		{
-			CameraRotation();
+			if(_player.mouseHoldCheck)
+			{
+				CameraRotation();
+			}
 		}
 
 		private void AssignAnimationIDs()
@@ -233,7 +240,7 @@ namespace StarterAssets
 				float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
 			// accelerate or decelerate to target speed
-			if (GameObject.Find("Boy").GetComponent<Player>().CanInput == true)
+			if (this.gameObject.GetComponent<Player>().CanInput == true)
 			{
 				if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
 				{
