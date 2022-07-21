@@ -26,7 +26,7 @@ public class enemy2 : MonoBehaviour
 
     void Update()
     {
-        if(!isHit) //한번 맞고나서 0.1초 무적 킹아
+        if(!isHit)
         {
             hitDelay += Time.deltaTime * 0.92f;
             isHit = hitRate < hitDelay;

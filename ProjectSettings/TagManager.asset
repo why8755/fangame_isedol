@@ -9,7 +9,6 @@ TagManager:
   - CinemachineTarget
   - Enemy
   - NPC
-  - ItemSlot
   layers:
   - Default
   - TransparentFX
