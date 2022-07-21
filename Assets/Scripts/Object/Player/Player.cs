@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
    public void OnattacCollision()
     {
         attackCollision.SetActive(true);
-    }
+    }   
 
     void GetInput()
     {
