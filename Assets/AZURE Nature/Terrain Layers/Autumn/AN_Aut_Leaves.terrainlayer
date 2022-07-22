@@ -7,7 +7,7 @@ TerrainLayer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AN_Aut_Leaves
-  m_DiffuseTexture: {fileID: 2800000, guid: 1e981d35459dbd34ca635dbc17207d5f, type: 3}
+  m_DiffuseTexture: {fileID: 2800000, guid: 90ded0611e490aa4ba6961afbfc2280d, type: 3}
   m_NormalMapTexture: {fileID: 2800000, guid: 0d4fabb0258efd6459f6f3b864ce58ca, type: 3}
   m_MaskMapTexture: {fileID: 0}
   m_TileSize: {x: 1, y: 1}
