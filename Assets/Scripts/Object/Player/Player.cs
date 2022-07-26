@@ -64,18 +64,23 @@ public class Player : MonoBehaviour
             Cursor.visible = false;
 
             Attack();
-
+            
             if (CanMove == false)
             {    
                 targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
                 transform.LookAt(targetPosition);
             }
+            
+            
         }
         else
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
         }
+
+        if(anima.GetCurrentAnimatorStateInfo(0).IsName("Slash") && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.995f) //공격애니메이션동안 애니메이션으로 이동
+            anima.applyRootMotion = false;
     }
 
    public void OnattacCollision()
@@ -108,19 +113,24 @@ public class Player : MonoBehaviour
         if (player.GetComponent<ThirdPersonController>().Grounded == true)
         {
             if (fDown && isFireReady)
-            {
+            {   
                 CanMove = false;
+
                 weapon.GetComponent<Weapon>().Use();
 
-                Invoke("molu", 0.15f);
-                player.GetComponent<ThirdPersonController>().MoveSpeed = 1.22f;
-                player.GetComponent<ThirdPersonController>().SprintSpeed = 2.55f;
+                Invoke("molu", 0.01f);
+
+                //player.GetComponent<ThirdPersonController>().MoveSpeed = 1.22f;
+                //player.GetComponent<ThirdPersonController>().SprintSpeed = 2.55f;
+                player.GetComponent<ThirdPersonController>().MoveSpeed = 0f;
+                player.GetComponent<ThirdPersonController>().SprintSpeed = 0f;
                 anima.SetTrigger("doSwing");
+                anima.applyRootMotion = true;
                 fireDelay = 0;
                 CanInput = true;
                 player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
             }
-        }
+        }/*
         else
         {
             if (fDown && isFireReady)
@@ -134,19 +144,18 @@ public class Player : MonoBehaviour
                 fireDelay = 0;
                 player.GetComponent<ThirdPersonController>().Grounded = false;
             }
-        }
+        }*/
 
     }
 
     void molu()
     {
         CanInput = true;
-        Invoke("checkspeed", 0.95f);
+        CanMove = true;
+        Invoke("checkspeed", 2.0f);
     }
     void checkspeed()
     {
-        CanMove = true;
-        CanInput = true;
         player.GetComponent<ThirdPersonController>().MoveSpeed = 2.0f;
         player.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
     }
