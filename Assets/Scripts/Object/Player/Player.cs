@@ -64,18 +64,23 @@ public class Player : MonoBehaviour
             Cursor.visible = false;
 
             Attack();
-
+                
+            
             if (CanMove == false)
             {    
                 targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-                transform.LookAt(targetPosition);
+                //transform.LookAt(targetPosition);
             }
+            
         }
         else
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
         }
+        if(anima.GetCurrentAnimatorStateInfo(0).IsName("Slash") && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.995f) //공격애니메이션동안 애니메이션으로 이동
+            anima.applyRootMotion = false;
+        
     }
 
    public void OnattacCollision()
@@ -109,18 +114,23 @@ public class Player : MonoBehaviour
         {
             if (fDown && isFireReady)
             {
+                targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+                transform.LookAt(targetPosition);
+
                 CanMove = false;
                 weapon.GetComponent<Weapon>().Use();
 
                 Invoke("molu", 0.15f);
-                player.GetComponent<ThirdPersonController>().MoveSpeed = 1.22f;
-                player.GetComponent<ThirdPersonController>().SprintSpeed = 2.55f;
+                player.GetComponent<ThirdPersonController>().MoveSpeed = 0.0f;
+                player.GetComponent<ThirdPersonController>().SprintSpeed = 0.0f;
+                anima.applyRootMotion = true;
+                //player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
                 anima.SetTrigger("doSwing");
                 fireDelay = 0;
                 CanInput = true;
-                player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
             }
         }
+        /* 점프중 공격 불가
         else
         {
             if (fDown && isFireReady)
@@ -135,7 +145,7 @@ public class Player : MonoBehaviour
                 player.GetComponent<ThirdPersonController>().Grounded = false;
             }
         }
-
+        */
     }
 
     void molu()
