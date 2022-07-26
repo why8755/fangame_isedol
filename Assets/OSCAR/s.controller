@@ -20,11 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-<<<<<<< HEAD:Assets/OSCAR/s.controller
   m_Motion: {fileID: 5892374519696236162, guid: 41143dbec3783d64487f326b3b7d7e70, type: 3}
-=======
-  m_Motion: {fileID: -203655887218126122, guid: 18f88ab0d0d5587488cc6dc919eb64ed, type: 3}
->>>>>>> e4acbfe31ff1dec22dfbeb57d69bafe57fd164cc:Assets/OSCAR/xbot@Great Sword Slash.controller
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
