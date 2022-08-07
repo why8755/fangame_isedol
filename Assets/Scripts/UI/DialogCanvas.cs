@@ -7,7 +7,7 @@ using TMPro;
 public class DialogCanvas : CanvasUI
 {
     [SerializeField]
-    Image dialogBox, nameBox, dialogPortrait;
+    Image dialogBox, nameBox;
 
     [SerializeField]
     TextMeshProUGUI dialogText, nameText;
@@ -27,12 +27,13 @@ public class DialogCanvas : CanvasUI
     {
         //NextDialog();
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (dialogDB.Sheet1.Count > curDialogIndex + 1) NextDialog();
             else
             {
                 Managers.Instance.CanvasManager.CloseCanvasUI();
+                return true;
             }
         }
 
