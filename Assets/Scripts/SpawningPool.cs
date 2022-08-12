@@ -1,51 +1,65 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
 
 
-// 테스트 중
-// 회사에서 작성 집가서 수정하려고 commit
-/*
- 마을 밖에서 해당 코드 실행
- GameObject go = new GameObject { name = "SpawningPool" };
- SpawningPool pool = go.GetOrAddComponent<SpawningPool>();
- pool.SetKeepMonsterCount(5);
- */
- /*
 public class SpawningPool : MonoBehaviour
 {
-    [SerializeField]
+    //관련기획 부재로 간략하게 작성
+    public GameObject theEnemy;
+    public int EnenmySpawnCount;
+    public int xPos;
+    public int yPos;
+
+   /* [SerializeField]
     int _monsterCount = 0; // 현재 Enemy 수
     int _reserveCount = 0; // 코루틴을 생성할 때 현재 예약된 코루틴이 몇개인지 판단하기 위해
     [SerializeField]
-    int _keepMonsterCount = 0;  // 필드에 최대 Enemy 수
+    int _keepMonsterCount = 5;  // 필드에 최대 Enemy 수
     [SerializeField]
     Vector3 _spawnPos; // Spawn 위치
     [SerializeField]
     float _spawnRadius = 15.0f; // Spawn 범위
     [SerializeField]
-    float _spawnTime = 5.0f; // 간격
+    float _spawnTime = 5.0f; // 간격*/
 
     public void AddMonsterCount(int value) { _monsterCount += value; }
     public void SetKeepMonsterCount(int count) { _keepMonsterCount = count; }
 
     void Start()
     {
-        Managers.Game.OnSpawnEvent -= AddMonsterCount;
-        Managers.Game.OnSpawnEvent += AddMonsterCount;
+        // 최초스폰일 경우 사용
+        EnenmySpawnCount = 10;
+        StartCoroutine("EnemyDrop");
     }
 
     void Update()
     {
-        while (_reserveCount + _monsterCount < _keepMonsterCount)
+        // 지속적인 스폰일 경우 사용
+        /*while (_reserveCount + _monsterCount < _keepMonsterCount)
         // 현재 몬스터의 수와 예약된 코루틴의 수가 _keepMonsterCount보다 적다면 코루틴 실행
         {
             StartCoroutine("ReserveSpawn");
+        }*/
+    }
+
+    //관련기획 부재로 간략하게 작성
+    IEnumerator EnemyDrop()
+    { 
+        while(EnenmySpawnCount < 10)
+        {
+            xPos = Random.Range(1, 50);   
+            yPos = Random.Range(1, 50);
+            Instantiate(theEnemy, new Vector3(xPos, 50, yPos), Quaternion.identity);
+            EnenmySpawnCount++;
         }
     }
 
-    IEnumerator ReserveSpawn()
+    // 지속적인 리스폰일경우 사용
+    /*IEnumerator ReserveSpawn()
     {
         _reserveCount++;
         yield return new WaitForSeconds(Random.Range(0, _spawnTime));
@@ -71,10 +85,10 @@ public class SpawningPool : MonoBehaviour
 
         obj.transform.position = randPos;
         _reserveCount--;
-    }
+    }*/
 }
 
-public class GameManagerEx
+/*public class GameManagerEx
 {
 	...
     public Action<int> OnSpawnEvent;
@@ -106,5 +120,4 @@ public class GameManagerEx
                         _monsters.Remove(go);
                     }
                 }
-}
-*/
+}*/
