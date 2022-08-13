@@ -1,70 +1,78 @@
-ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 public class SpawningPool : MonoBehaviour
 {
-    //ê´€ë ¨ê¸°íš ë¶€ì¬ë¡œ ê°„ëµí•˜ê²Œ ì‘ì„±
+    //°ü·Ã±âÈ¹ ºÎÀç·Î °£·«ÇÏ°Ô ÀÛ¼º
     public GameObject theEnemy;
     public int EnenmySpawnCount;
     public int xPos;
     public int yPos;
 
-   /* [SerializeField]
-    int _monsterCount = 0; // í˜„ì¬ Enemy ìˆ˜
-    int _reserveCount = 0; // ì½”ë£¨í‹´ì„ ìƒì„±í•  ë•Œ í˜„ì¬ ì˜ˆì•½ëœ ì½”ë£¨í‹´ì´ ëª‡ê°œì¸ì§€ íŒë‹¨í•˜ê¸° ìœ„í•´
-    [SerializeField]
-    int _keepMonsterCount = 5;  // í•„ë“œì— ìµœëŒ€ Enemy ìˆ˜
-    [SerializeField]
-    Vector3 _spawnPos; // Spawn ìœ„ì¹˜
-    [SerializeField]
-    float _spawnRadius = 15.0f; // Spawn ë²”ìœ„
-    [SerializeField]
-    float _spawnTime = 5.0f; // ê°„ê²©*/
+    /* [SerializeField]
+     int _monsterCount = 0; // ÇöÀç Enemy ¼ö
+     int _reserveCount = 0; // ÄÚ·çÆ¾À» »ı¼ºÇÒ ¶§ ÇöÀç ¿¹¾àµÈ ÄÚ·çÆ¾ÀÌ ¸î°³ÀÎÁö ÆÇ´ÜÇÏ±â À§ÇØ
+     [SerializeField]
+     int _keepMonsterCount = 5;  // ÇÊµå¿¡ ÃÖ´ë Enemy ¼ö
+     [SerializeField]
+     Vector3 _spawnPos; // Spawn À§Ä¡
+     [SerializeField]
+     float _spawnRadius = 15.0f; // Spawn ¹üÀ§
+     [SerializeField]
+     float _spawnTime = 5.0f; // °£°İ*/
 
-    public void AddMonsterCount(int value) { _monsterCount += value; }
-    public void SetKeepMonsterCount(int count) { _keepMonsterCount = count; }
+    //public void AddMonsterCount(int value) { _monsterCount += value; }
+    //public void SetKeepMonsterCount(int count) { _keepMonsterCount = count; }
 
     void Start()
     {
-        // ìµœì´ˆìŠ¤í°ì¼ ê²½ìš° ì‚¬ìš©
-        EnenmySpawnCount = 10;
-        StartCoroutine("EnemyDrop");
+        
     }
 
     void Update()
     {
-        // ì§€ì†ì ì¸ ìŠ¤í°ì¼ ê²½ìš° ì‚¬ìš©
+        // Áö¼ÓÀûÀÎ ½ºÆùÀÏ °æ¿ì »ç¿ë
         /*while (_reserveCount + _monsterCount < _keepMonsterCount)
-        // í˜„ì¬ ëª¬ìŠ¤í„°ì˜ ìˆ˜ì™€ ì˜ˆì•½ëœ ì½”ë£¨í‹´ì˜ ìˆ˜ê°€ _keepMonsterCountë³´ë‹¤ ì ë‹¤ë©´ ì½”ë£¨í‹´ ì‹¤í–‰
+        // ÇöÀç ¸ó½ºÅÍÀÇ ¼ö¿Í ¿¹¾àµÈ ÄÚ·çÆ¾ÀÇ ¼ö°¡ _keepMonsterCountº¸´Ù Àû´Ù¸é ÄÚ·çÆ¾ ½ÇÇà
         {
             StartCoroutine("ReserveSpawn");
         }*/
     }
 
-    //ê´€ë ¨ê¸°íš ë¶€ì¬ë¡œ ê°„ëµí•˜ê²Œ ì‘ì„±
-    IEnumerator EnemyDrop()
-    { 
-        while(EnenmySpawnCount < 10)
+    private void OntriggerStay(Collider other)
+    {
+        if (other.gameObject.name == "Player(Gosegu)")
         {
-            xPos = Random.Range(1, 50);   
+            // ÃÖÃÊ½ºÆùÀÏ °æ¿ì »ç¿ë
+            StartCoroutine("EnemyDrop");
+        }
+    }
+
+    //°ü·Ã±âÈ¹ ºÎÀç·Î °£·«ÇÏ°Ô ÀÛ¼º
+    IEnumerator EnemyDrop()
+    {
+        while (EnenmySpawnCount < 10)
+        {
+            xPos = Random.Range(1, 50);
             yPos = Random.Range(1, 50);
             Instantiate(theEnemy, new Vector3(xPos, 50, yPos), Quaternion.identity);
+            yield return new WaitForSeconds(5);
             EnenmySpawnCount++;
         }
     }
 
-    // ì§€ì†ì ì¸ ë¦¬ìŠ¤í°ì¼ê²½ìš° ì‚¬ìš©
+    // Áö¼ÓÀûÀÎ ¸®½ºÆùÀÏ°æ¿ì »ç¿ë
     /*IEnumerator ReserveSpawn()
     {
         _reserveCount++;
         yield return new WaitForSeconds(Random.Range(0, _spawnTime));
         GameObject obj = Managers.Game.Spawn(Define.WorldObject.Monster, "DogPolyart");
-        // _monsterCountë¥¼ ì´ í•¨ìˆ˜ì—ì„œ ëŠ˜ë¦¬ì§€ ì•Šì•„ë„ GameManagerExì—ì„œ Spawní•¨ìˆ˜ê°€ ì‹¤í–‰ë  ë•Œ Invokeë¡œ _monsterCountë¥¼ ëŠ˜ë ¤ì¤€ë‹¤.
+        // _monsterCount¸¦ ÀÌ ÇÔ¼ö¿¡¼­ ´Ã¸®Áö ¾Ê¾Æµµ GameManagerEx¿¡¼­ SpawnÇÔ¼ö°¡ ½ÇÇàµÉ ¶§ Invoke·Î _monsterCount¸¦ ´Ã·ÁÁØ´Ù.
         NavMeshAgent nma = obj.GetOrAddComponent<NavMeshAgent>();
 
         Vector3 randPos;
@@ -74,13 +82,13 @@ public class SpawningPool : MonoBehaviour
             Vector3 randDir = Random.insideUnitSphere * Random.Range(0, _spawnRadius);
             randDir.y = 0;
             randPos = _spawnPos + randDir;
-            // ëœë¤í•œ ë°©í–¥ë²¡í„°ë¥¼ ìƒì„±í•œë‹¤.
-            // ëª¬ìŠ¤í„°ëŠ” í‰ë©´ì— ìœ„ì¹˜í•´ì•¼ í•˜ê¸° ë•Œë¬¸ì— ìƒì„±ëœ ëœë¤ë²¡í„°ì˜ yì¢Œí‘œë¥¼ 0ìœ¼ë¡œ ë§Œë“¤ì–´ì¤€ë‹¤.
+            // ·£´ıÇÑ ¹æÇâº¤ÅÍ¸¦ »ı¼ºÇÑ´Ù.
+            // ¸ó½ºÅÍ´Â Æò¸é¿¡ À§Ä¡ÇØ¾ß ÇÏ±â ¶§¹®¿¡ »ı¼ºµÈ ·£´ıº¤ÅÍÀÇ yÁÂÇ¥¸¦ 0À¸·Î ¸¸µé¾îÁØ´Ù.
 
             NavMeshPath path = new NavMeshPath();
             if (nma.CalculatePath(randPos, path))
                 break;
-            // ìƒì„±ëœ ëœë¤ë²¡í„°ì— ê°ˆ ìˆ˜ ìˆë‚˜ ì—†ë‚˜ ê³„ì‚°
+            // »ı¼ºµÈ ·£´ıº¤ÅÍ¿¡ °¥ ¼ö ÀÖ³ª ¾ø³ª °è»ê
         }
 
         obj.transform.position = randPos;
