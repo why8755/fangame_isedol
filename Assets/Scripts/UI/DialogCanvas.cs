@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class DialogCanvas : CanvasUI
 {
     [SerializeField]
@@ -17,7 +18,10 @@ public class DialogCanvas : CanvasUI
 
     int curDialogIndex = -1;
 
-    
+    bool typing;
+    float typingSpeed = 0.2f;
+
+
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => UpdateDialog());
@@ -25,16 +29,21 @@ public class DialogCanvas : CanvasUI
 
     public bool UpdateDialog()
     {
-        //NextDialog();
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (dialogDB.Sheet1.Count > curDialogIndex + 1) NextDialog();
-            else
+            if (typing)
             {
-                Managers.Instance.CanvasManager.CloseCanvasUI();
-                return true;
+                typing = false;
+
+                StopCoroutine("TypingEffect");
+                dialogText.text = dialogDB.Sheet1[curDialogIndex].dialog;
+
+                return false;
             }
+
+            if (dialogDB.Sheet1.Count > curDialogIndex + 1) NextDialog();
+            else return true;
+
         }
 
         return false;
@@ -45,8 +54,27 @@ public class DialogCanvas : CanvasUI
 
         curDialogIndex++;
 
-        dialogText.text = dialogDB.Sheet1[curDialogIndex].dialog;
+        //dialogText.text = dialogDB.Sheet1[curDialogIndex].dialog;
         nameText.text = dialogDB.Sheet1[curDialogIndex].name;
+
+        StartCoroutine("TypingEffect");
+    }
+
+    IEnumerator TypingEffect()
+    {
+        int _index = 0;
+        typing = true;
+
+        while (_index < dialogDB.Sheet1[curDialogIndex].dialog.Length)
+        {
+            dialogText.text = dialogDB.Sheet1[curDialogIndex].dialog.Substring(0, _index + 1);
+
+            _index++;
+
+            yield return new WaitForSeconds(typingSpeed);
+        }
+        typing = false;
+
     }
 
 }
