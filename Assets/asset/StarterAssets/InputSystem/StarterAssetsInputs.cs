@@ -55,10 +55,13 @@ namespace StarterAssets
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
 
-
+		
 		public void MoveInput(Vector2 newMoveDirection)
 		{
-			move = newMoveDirection;
+			if (this.gameObject.GetComponent<Player>().Local_input == true)
+			{
+				move = newMoveDirection;
+			}
 		} 
 
 		public void LookInput(Vector2 newLookDirection)
@@ -73,12 +76,14 @@ namespace StarterAssets
 
 		public void JumpInput(bool newJumpState)
 		{
-			if (GameObject.Find("Boy").GetComponent<Player>().CanInput == true)
+			if (this.gameObject.GetComponent<Player>().Local_input == true)
+			{
 				jump = newJumpState;
+			}
 		}
 
 		public void SprintInput(bool newSprintState)
-		{
+		{	
 			sprint = newSprintState;
 		}
 

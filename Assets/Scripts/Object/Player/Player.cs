@@ -6,7 +6,7 @@ using StarterAssets;
 
 public class Player : MonoBehaviour
 {
-    public bool mouseHoldCheck = true; // true일때는 유저행동불가
+    public bool mouseHoldCheck = true; // false일때는 유저행동불가
     public GameObject crosshair; // 임시 크로스헤어 제거용
     public GameObject weapon;
 
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public GameObject CameraRoot;
     public GameObject player;
 
+    public float targetRotation;
     //체력
     public int maxHealth;
     public int curHealth;
@@ -30,6 +31,7 @@ public class Player : MonoBehaviour
 
     public bool CanMove = true;
     public bool CanInput;
+    public bool Local_input = true;
     bool fDown;
     bool isFireReady = true;
     public bool isHit = true; //맞을 수 있는가
@@ -58,29 +60,26 @@ public class Player : MonoBehaviour
     void Update()
     {
         GetInput();
-
+        Debug.Log(mouseHoldCheck);
         if(mouseHoldCheck){ // alt -> cant move 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
             Attack();
-            
-            if (CanMove == false)
-            {    
-                targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-                transform.LookAt(targetPosition);
-            }
-            
-            
         }
         else
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
         }
-
-        if(anima.GetCurrentAnimatorStateInfo(0).IsName("Slash") && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.995f) //공격애니메이션동안 애니메이션으로 이동
+        //공격애니메이션동안 애니메이션으로 이동
+        if(anima.GetCurrentAnimatorStateInfo(0).IsName("Slash") && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.98f) 
+        {
             anima.applyRootMotion = false;
+            player.GetComponent<ThirdPersonController>().MoveSpeed = 2.0f;
+            player.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
+            Local_input = true;
+        }
     }
 
    public void OnattacCollision()
@@ -94,7 +93,7 @@ public class Player : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftAlt) && (CanMove && _third.Grounded))
         {
-            if(mouseHoldCheck){
+            if(!mouseHoldCheck){
                 anima.SetFloat(_animIDSpeed, 0.01f);
 			    anima.SetFloat(_animIDMotionSpeed, 0.01f);
             }
@@ -115,49 +114,30 @@ public class Player : MonoBehaviour
             if (fDown && isFireReady)
             {   
                 CanMove = false;
-
+                CanInput = false;
+                Local_input = false;
+                // when start animation, change move direction in StarterAssetsInputs & rotation in ThirdPersonController
+                player.GetComponent<StarterAssetsInputs>().move = new Vector2(0.0f, 0.0f);
+                
+                targetRotation = player.GetComponent<ThirdPersonController>()._mainCamera.transform.eulerAngles.y;
+				transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
+                player.GetComponent<ThirdPersonController>()._targetRotation = player.GetComponent<ThirdPersonController>().rotation = targetRotation;
+                
                 weapon.GetComponent<Weapon>().Use();
 
                 Invoke("molu", 0.01f);
-
-                //player.GetComponent<ThirdPersonController>().MoveSpeed = 1.22f;
-                //player.GetComponent<ThirdPersonController>().SprintSpeed = 2.55f;
                 player.GetComponent<ThirdPersonController>().MoveSpeed = 0f;
                 player.GetComponent<ThirdPersonController>().SprintSpeed = 0f;
                 anima.SetTrigger("doSwing");
                 anima.applyRootMotion = true;
                 fireDelay = 0;
-                CanInput = true;
-                player.transform.rotation = Quaternion.Euler(0.0f, player.GetComponent<ThirdPersonController>().rotation, 0.0f);
             }
-        }/*
-        else
-        {
-            if (fDown && isFireReady)
-            {
-                
-                weapon.GetComponent<Weapon>().Use();
-                anima.SetTrigger("doSwing");
-                Invoke("checkspeed", 0.95f);
-                player.GetComponent<ThirdPersonController>().MoveSpeed = 1.5f;
-                player.GetComponent<ThirdPersonController>().SprintSpeed = 4.355f;
-                fireDelay = 0;
-                player.GetComponent<ThirdPersonController>().Grounded = false;
-            }
-        }*/
-
+        }
     }
 
     void molu()
     {
         CanInput = true;
         CanMove = true;
-        Invoke("checkspeed", 2.0f);
     }
-    void checkspeed()
-    {
-        player.GetComponent<ThirdPersonController>().MoveSpeed = 2.0f;
-        player.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
-    }
-
 }

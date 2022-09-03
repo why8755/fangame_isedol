@@ -256,10 +256,10 @@ namespace StarterAssets
 					_speed = targetSpeed;
 				}
 				_animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
-
+			
 				// normalise input direction
 				Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
+			
 				// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 				// if there is a move input rotate player when the player is moving
 				if (Boy.GetComponent<Player>().CanMove == true)
@@ -268,16 +268,16 @@ namespace StarterAssets
 					{
 						_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
 						rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
-
+						
 						// rotate to face input direction relative to camera position
 						transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 					}
 					Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
 					_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+					
 				}
-
-				
+			}
 
 			
 
@@ -287,7 +287,7 @@ namespace StarterAssets
 					_animator.SetFloat(_animIDSpeed, _animationBlend);
 					_animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
 				}
-			}
+			
 		}
 
 		private void JumpAndGravity()
