@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,13 @@ public class Player : MonoBehaviour
 
     Vector3 moveVec;
 
+    int isCombo = 0;
+    public float cooldownTime = 2f;
+    private float nextFireTime = 0f;
+    public static int noOfClicks = 0;
+    float lastClickedTime = 0;
+    float maxComboDelay = 1;
+
     private void Awake()
     {
         _third = GetComponent<ThirdPersonController>();
@@ -59,28 +67,74 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        GetInput();
-        Debug.Log(mouseHoldCheck);
-        if(mouseHoldCheck){ // alt -> cant move 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+        /* GetInput();
+         if(mouseHoldCheck){ // alt -> cant move 
+             Cursor.lockState = CursorLockMode.Locked;
+             Cursor.visible = false;
 
-            Attack();
-        }
-        else
+             Attack();
+         }
+         else
+         {
+
+             Cursor.visible = true;
+             Cursor.lockState = CursorLockMode.Confined;
+         }*/
+        
+
+        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
+            anima.SetBool("slash1", false);
         }
-        //공격애니메이션동안 애니메이션으로 이동
-        if(anima.GetCurrentAnimatorStateInfo(0).IsName("Slash") && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.98f) 
+        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
         {
-            anima.applyRootMotion = false;
-            player.GetComponent<ThirdPersonController>().MoveSpeed = 2.0f;
-            player.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
-            Local_input = true;
+            anima.SetBool("slash2", false);
+        }
+        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk3"))
+        {
+            anima.SetBool("slash3", false);
+        }
+
+        if(Time.time - lastClickedTime > maxComboDelay)
+        {
+            noOfClicks = 0;
+        }
+
+        if(Time.time > nextFireTime)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnClick();
+            }
         }
     }
+
+    void OnClick()
+    {
+        lastClickedTime = Time.time;
+        noOfClicks++;
+        if(noOfClicks == 1)
+        {
+            Debug.Log(1);
+            anima.SetBool("slash1", true);
+            Attack();
+        }
+        noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
+
+        if(noOfClicks >= 2 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f &&  anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
+        {
+            anima.SetBool("slash1", false);
+            anima.SetBool("slash2", true);
+            Attack();
+        }
+        if (noOfClicks >= 3 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
+        {
+            anima.SetBool("slash2", false);
+            anima.SetBool("slash3", true);
+            Attack();
+        }
+    }
+
 
    public void OnattacCollision()
     {
@@ -106,7 +160,7 @@ public class Player : MonoBehaviour
     void Attack()
     {       
 
-        fireDelay += Time.deltaTime * 0.92f;
+        fireDelay += Time.deltaTime * 0.4f;
         isFireReady = weapon.GetComponent<Weapon>().rate < fireDelay;
         
         if (player.GetComponent<ThirdPersonController>().Grounded == true)
