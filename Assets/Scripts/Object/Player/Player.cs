@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("noOfClicks : " + noOfClicks);
         /* GetInput();
          if(mouseHoldCheck){ // alt -> cant move 
              Cursor.lockState = CursorLockMode.Locked;
@@ -129,10 +130,27 @@ public class Player : MonoBehaviour
         }
         if (noOfClicks >= 3 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
         {
-            anima.SetBool("slash2", false);
+            anima. SetBool("slash2", false);
             anima.SetBool("slash3", true);
+
             Attack();
         }
+
+        //  3단공격 끝났을때 
+        if(noOfClicks >= 3 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk3"))
+        {
+            Debug.Log("공격 끝!");
+            StartCoroutine(AttectEndDelay());
+        }
+    }
+
+    private IEnumerator AttectEndDelay()
+    {
+        yield return new WaitForSeconds(0.25f);
+
+        noOfClicks = 0;
+
+        
     }
 
 
