@@ -82,15 +82,15 @@ public class Player : MonoBehaviour
          }*/
         
 
-        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
+        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
         {
             anima.SetBool("slash1", false);
         }
-        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
+        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
         {
             anima.SetBool("slash2", false);
         }
-        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk3"))
+        if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk3"))
         {
             anima.SetBool("slash3", false);
         }
@@ -121,13 +121,13 @@ public class Player : MonoBehaviour
         }
         noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
 
-        if(noOfClicks >= 2 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f &&  anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
+        if(noOfClicks >= 2 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&  anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
         {
             anima.SetBool("slash1", false);
             anima.SetBool("slash2", true);
             Attack();
         }
-        if (noOfClicks >= 3 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
+        if (noOfClicks >= 3 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
         {
             anima.SetBool("slash2", false);
             anima.SetBool("slash3", true);
