@@ -1,3 +1,4 @@
+using System.Runtime.Serialization.Formatters;
 //using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ public class EnemyControl : MonoBehaviour
     [SerializeField]
     private Color originColor;
 
+    public EffectManager EffectManager;
+
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -23,11 +26,13 @@ public class EnemyControl : MonoBehaviour
     public void TakeDamage(GameObject target) // 데미지 받은 경우
     {
         Weapon weapon = target.GetComponentInParent<Weapon>();
-        int Hp = this.GetComponent<enemy2>().curHealth -= weapon.damage;
+        enemy2 enemy_script = this.GetComponent<enemy2>();
+        int Hp = enemy_script.curHealth -= weapon.damage;
         Debug.Log("Damage : "+ weapon.damage +" Current Hp : "+ Hp);
         //target.GetComponent<Collider>().enabled = false; //데미지 2번터져서 넣어둔 임시 코드
         //Vector3 reactVec = transform.position - target.transform.position; //허수아비용에서는 필요없어서 뺏음
         StartCoroutine(OnHitColor(Hp));
+        OnHitEffect(enemy_script.EffectParticle);
     }
 
     private IEnumerator OnHitColor(int Hp)
@@ -45,6 +50,12 @@ public class EnemyControl : MonoBehaviour
             meshRenderer.material.color = originColor;
         }
     }
+
+    private void OnHitEffect(ParticleSystem particle)
+    {
+        StartCoroutine(EffectManager.HitTesterParticle(particle));
+    }
+
     void Start()
     {
         

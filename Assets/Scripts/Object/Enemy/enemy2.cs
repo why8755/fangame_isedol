@@ -13,9 +13,11 @@ public class enemy2 : MonoBehaviour
     public int defense;
     public int damage;
     public Transform target;
+    public GameObject EffectParticleGameObject;
+    public ParticleSystem EffectParticle;
     
     public bool isHit = true;
-    float hitRate = 0.1f;
+    public float hitRate = 0.5f;
     float hitDelay = 0f;
 
     Rigidbody rigid;
@@ -26,10 +28,12 @@ public class enemy2 : MonoBehaviour
 
     void Update()
     {
-        if(!isHit) //한번 맞고나서 0.1초 무적 킹아
+        if(!isHit) //한번 맞고나서 0.5초 무적 킹아
         {
             hitDelay += Time.deltaTime * 0.92f;
             isHit = hitRate < hitDelay;
+            if(isHit)
+                hitDelay = 0f;
         }
         //nav.SetDestination(target.position);
     }
@@ -37,6 +41,7 @@ public class enemy2 : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         boxCollider = GetComponentInChildren<BoxCollider>();
+        EffectParticle = EffectParticleGameObject.GetComponentInChildren<ParticleSystem>();
         //nav = GetComponent<NavMeshAgent>();
         //mat = GetComponent<MeshRenderer>().material;
        

@@ -68,46 +68,52 @@ public class Player : MonoBehaviour
     void Update()
     {
         Debug.Log("noOfClicks : " + noOfClicks);
-        /* GetInput();
+        GetInput();
          if(mouseHoldCheck){ // alt -> cant move 
              Cursor.lockState = CursorLockMode.Locked;
              Cursor.visible = false;
-
-             Attack();
+             Attack(); // 늘 update되어야 합니다 따로넣으시면 안됩니다.
          }
          else
          {
 
              Cursor.visible = true;
              Cursor.lockState = CursorLockMode.Confined;
-         }*/
+         }
         
 
         if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
         {
             anima.SetBool("slash1", false);
+            anima.applyRootMotion = false;
+            Local_input = true;
         }
         if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
         {
             anima.SetBool("slash2", false);
+            anima.applyRootMotion = false;
+            Local_input = true;
         }
         if (anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk3"))
         {
             anima.SetBool("slash3", false);
+            anima.applyRootMotion = false;
+            Local_input = true;
         }
 
         if(Time.time - lastClickedTime > maxComboDelay)
         {
             noOfClicks = 0;
         }
-
-        if(Time.time > nextFireTime)
+        /*
+        if(Time.time > nextFireTime && CanInput)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                OnClick();
+                OnClick(); // Attack() 안으로 옮겼습니다
             }
         }
+        */
     }
 
     void OnClick()
@@ -116,24 +122,23 @@ public class Player : MonoBehaviour
         noOfClicks++;
         if(noOfClicks == 1)
         {
+            anima.applyRootMotion = true;
             Debug.Log(1);
             anima.SetBool("slash1", true);
-            Attack();
         }
         noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
 
         if(noOfClicks >= 2 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f &&  anima.GetCurrentAnimatorStateInfo(0).IsName("Atk1"))
         {
             anima.SetBool("slash1", false);
+            anima.applyRootMotion = true;
             anima.SetBool("slash2", true);
-            Attack();
         }
         if (noOfClicks >= 3 && anima.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.2f && anima.GetCurrentAnimatorStateInfo(0).IsName("Atk2"))
         {
-            anima. SetBool("slash2", false);
+            anima.SetBool("slash2", false);
+            anima.applyRootMotion = true;
             anima.SetBool("slash3", true);
-
-            Attack();
         }
 
         //  3단공격 끝났을때 
@@ -165,10 +170,12 @@ public class Player : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftAlt) && (CanMove && _third.Grounded))
         {
+            
             if(!mouseHoldCheck){
                 anima.SetFloat(_animIDSpeed, 0.01f);
 			    anima.SetFloat(_animIDMotionSpeed, 0.01f);
             }
+            
             CanInput = !CanInput;
             mouseHoldCheck = !mouseHoldCheck;
             crosshair.SetActive(mouseHoldCheck);
@@ -179,12 +186,15 @@ public class Player : MonoBehaviour
     {       
 
         fireDelay += Time.deltaTime * 0.4f;
-        isFireReady = weapon.GetComponent<Weapon>().rate < fireDelay;
+        isFireReady = Time.time > nextFireTime; 
+        //isFireReady = weapon.GetComponent<Weapon>().rate < fireDelay;
         
         if (player.GetComponent<ThirdPersonController>().Grounded == true)
         {
             if (fDown && isFireReady)
             {   
+                OnClick();
+
                 CanMove = false;
                 CanInput = false;
                 Local_input = false;
@@ -193,15 +203,14 @@ public class Player : MonoBehaviour
                 
                 targetRotation = player.GetComponent<ThirdPersonController>()._mainCamera.transform.eulerAngles.y;
 				transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
-                player.GetComponent<ThirdPersonController>()._targetRotation = player.GetComponent<ThirdPersonController>().rotation = targetRotation;
+                player.GetComponent<ThirdPersonController>()._targetRotation = player.GetComponent<ThirdPersonController>().rotation = targetRotation; // 바라보는 방향으로 회전(서서히가 아니라 바로 회전)
                 
                 weapon.GetComponent<Weapon>().Use();
 
                 Invoke("molu", 0.01f);
                 player.GetComponent<ThirdPersonController>().MoveSpeed = 0f;
                 player.GetComponent<ThirdPersonController>().SprintSpeed = 0f;
-                anima.SetTrigger("doSwing");
-                anima.applyRootMotion = true;
+                //anima.SetTrigger("doSwing");
                 fireDelay = 0;
             }
         }
@@ -211,5 +220,7 @@ public class Player : MonoBehaviour
     {
         CanInput = true;
         CanMove = true;
+        player.GetComponent<ThirdPersonController>().MoveSpeed = 2f;
+        player.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
     }
 }

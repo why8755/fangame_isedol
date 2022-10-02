@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     public int damage;//무기 공격력
     public float rate;
     public BoxCollider meleeArea;
+    public ParticleSystem hitparticle;
     public TrailRenderer trailEffect;
 
 
